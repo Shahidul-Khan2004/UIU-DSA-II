@@ -23,42 +23,42 @@ int main () {
     cout << "2nd max: " << res.secondMaximum << " 2nd min: " << res.secondMinimum << endl;
 }
 
-MaxMin max_min(vector<int>& arr, int beginning, int end) {
-    //base case
-    if (beginning == end) {
-        return {arr[beginning], arr[beginning], INT_MIN, INT_MAX};
-    }
-
-    //divide into sub problems
-    int mid = (beginning + end) / 2;
-    MaxMin res_left = max_min(arr, beginning, mid);
-    MaxMin res_right = max_min(arr, mid + 1, end);
-
-    //merging part
-    int maximum = max(res_left.maximum, res_right.maximum);
-    int secondMaximum = merge_second_value(
-        res_left.maximum,
-        res_right.maximum,
-        res_left.secondMaximum,
-        res_right.secondMaximum,
-        true
-    );
-    int minimum = min(res_left.minimum, res_right.minimum);
-    int secondMinimum = merge_second_value(
-        res_left.minimum,
-        res_right.minimum,
-        res_left.secondMinimum,
-        res_right.secondMinimum,
-        false
-    );
-
-    return {maximum, minimum, secondMaximum, secondMinimum};
-}
-
 int merge_second_value(int leftValue, int rightValue, int leftSecondValue, int rightSecondValue, bool findMaximum) {
     if (findMaximum) {
         return max(min(leftValue, rightValue), max(leftSecondValue, rightSecondValue));
     }
 
     return min(max(leftValue, rightValue), min(leftSecondValue, rightSecondValue));
+}
+
+MaxMin max_min(vector<int>& arr, int beginning, int end) {
+    if (beginning == end) {
+        return {arr[beginning], arr[beginning], INT_MIN, INT_MAX};
+    }
+
+    int mid = (beginning + end) / 2;
+    MaxMin left = max_min(arr, beginning, mid);
+    MaxMin right = max_min(arr, mid + 1, end);
+
+    MaxMin res;
+
+    // maximum
+    if (left.maximum > right.maximum) {
+        res.maximum = left.maximum;
+        res.secondMaximum = max(right.maximum, left.secondMaximum);
+    } else {
+        res.maximum = right.maximum;
+        res.secondMaximum = max(left.maximum, right.secondMaximum);
+    }
+
+    // minimum
+    if (left.minimum < right.minimum) {
+        res.minimum = left.minimum;
+        res.secondMinimum = min(right.minimum, left.secondMinimum);
+    } else {
+        res.minimum = right.minimum;
+        res.secondMinimum = min(left.minimum, right.secondMinimum);
+    }
+
+    return res;
 }
