@@ -12,8 +12,6 @@ struct MaxMin
     int secondMinimum;
 };
 
-int merge_second_value(int leftValue, int rightValue, int leftSecondValue, int rightSecondValue, bool findMaximum);
-
 MaxMin max_min(vector<int>& arr, int beginning, int end);
 
 int main () {
@@ -23,13 +21,6 @@ int main () {
     cout << "2nd max: " << res.secondMaximum << " 2nd min: " << res.secondMinimum << endl;
 }
 
-int merge_second_value(int leftValue, int rightValue, int leftSecondValue, int rightSecondValue, bool findMaximum) {
-    if (findMaximum) {
-        return max(min(leftValue, rightValue), max(leftSecondValue, rightSecondValue));
-    }
-
-    return min(max(leftValue, rightValue), min(leftSecondValue, rightSecondValue));
-}
 
 MaxMin max_min(vector<int>& arr, int beginning, int end) {
     if (beginning == end) {
