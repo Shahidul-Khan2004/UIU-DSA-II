@@ -8,7 +8,14 @@ int mergeV(vector<int> &arr, int start, int mid, int end);
 
 int main()
 {
-    vector<int> arr = {4, 5, 6, 7, 1};
+    int n;
+    cin >> n;
+
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr[i];
+    }
 
     cout << countViolations(arr, 0, arr.size() - 1) << endl;
 }

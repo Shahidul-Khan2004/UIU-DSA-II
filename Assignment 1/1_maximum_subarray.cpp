@@ -16,8 +16,17 @@ Res cross_sum(vector<int> &nums, int start, int mid, int end);
 
 int main()
 {
-    vector<int> nums = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+    int n;
+    cin >> n;
+
+    vector<int> nums(n);
+    for (int i = 0; i < n; i++)
+    {
+        cin >> nums[i];
+    }
+
     Res res = maximum_subarray_sum(nums, 0, nums.size() - 1);
+
     cout << "Sum = " << res.sum << endl;
     cout << "Start Index = " << res.left_i << endl;
     cout << "End Index = " << res.right_i << endl;
