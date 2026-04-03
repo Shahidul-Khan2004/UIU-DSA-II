@@ -1,6 +1,8 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
@@ -9,6 +11,7 @@ int partition(vector<int> &arr, int start, int end);
 
 int main()
 {
+    srand(time(0));
     vector<int> arr = {5, 6, 4, 8, 7, 10, 9};
     quickSort(arr, 0, arr.size() - 1);
     for (int num : arr)
@@ -19,6 +22,8 @@ int main()
 int partition(vector<int> &arr, int start, int end)
 {
     int i = start - 1;
+    int pivot_idx = start + rand() % (end - start + 1);
+    swap(arr[pivot_idx], arr[end]);
     int pivot = arr[end];
     for (int j = start; j < end; j++)
     {
