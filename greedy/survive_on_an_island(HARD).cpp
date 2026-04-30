@@ -25,13 +25,12 @@ Output: 2 */
 using namespace std;
 
 int main() {
-    int S;
-    double N, M;
+    int S, N, M;
     cout << "The maximum unit of food you can buy each day: "; cin >> N;
     cout << "Number of days you are required to survive: "; cin >> S;
     cout << "Unit of food required each day to survive: "; cin >> M;
 
-    int min_days_to_visit_shop = ceil((S * M) / N);
+    int min_days_to_visit_shop = ceil((double)(S * M) / N);
     int full_weeks = S / 7;
     int remaining_week = S % 7;
     int total_shop_open_days = full_weeks * 5;
