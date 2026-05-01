@@ -3,32 +3,17 @@
 
 using namespace std;
 
-void quickSort(vector<int> &arr, int s, int e);
-int partition(vector<int> &arr, int s, int e);
+int countEven(vector<int> &arr, int s, int e);
 
 int main() {
-    vector<int> arr = {5, 6, 4, 8, 7, 10, 9};
-    quickSort(arr, 0, arr.size() - 1);
-    for (int i: arr) cout << i << " ";
-    cout << endl;
+    vector<int> arr = {1, 2, 3, 4, 5, 4, 5, 6, 8, 9, 22};
+    cout << countEven(arr, 0, arr.size() - 1) << endl;
 }
 
-void quickSort(vector<int> &arr, int s, int e) {
-    if (s >= e) return;
-    int pivot_idx = partition(arr, s, e);
-    quickSort(arr, s, pivot_idx - 1);
-    quickSort(arr, pivot_idx + 1, e);
-}
-
-int partition(vector<int> &arr, int s, int e) {
-    int i = s - 1;
-    int pivot = arr[e];
-    for(int j = s; j < e; j++) {
-        if (arr[j] <= pivot) {
-            i++;
-            swap(arr[j], arr[i]);
-        }
-    }
-    swap(arr[i+1], arr[e]);
-    return i + 1;
+int countEven(vector<int> &arr, int s, int e) {
+    if(s == e) return !(arr[s] % 2);
+    int mid = (s + e) / 2;
+    int l = countEven(arr, s, mid);
+    int r = countEven(arr, mid + 1, e);
+    return l + r;
 }
