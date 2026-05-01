@@ -1,42 +1,34 @@
 #include <iostream>
 #include <vector>
-#include <climits>
 
 using namespace std;
 
-int maximum_sub_sum(vector<int> &arr, int s, int e);
-int cross_sum(vector<int> &arr, int s, int mid, int e);
+void quickSort(vector<int> &arr, int s, int e);
+int partition(vector<int> &arr, int s, int e);
 
 int main() {
-    vector<int> arr = {2, 3, -8, 7, -1, 2, 3};
-    cout << maximum_sub_sum(arr, 0, arr.size() - 1) << endl;
+    vector<int> arr = {5, 6, 4, 8, 7, 10, 9};
+    quickSort(arr, 0, arr.size() - 1);
+    for (int i: arr) cout << i << " ";
+    cout << endl;
 }
 
-int maximum_sub_sum(vector<int> &arr, int s, int e) {
-    if(s == e) return arr[s];
-    int mid = (s + e) / 2;
-    int l = maximum_sub_sum(arr, s, mid);
-    int r = maximum_sub_sum(arr, mid + 1, e);
-    int c = cross_sum(arr, s, mid, e);
-    return max(max(l, r), c);
+void quickSort(vector<int> &arr, int s, int e) {
+    if (s >= e) return;
+    int pivot_idx = partition(arr, s, e);
+    quickSort(arr, s, pivot_idx - 1);
+    quickSort(arr, pivot_idx + 1, e);
 }
 
-int cross_sum(vector<int> &arr, int s, int mid, int e) {
-    int sum = 0;
-    int l_sum = INT_MIN;
-    int i = mid;
-    while (i >= s) {
-        sum += arr[i];
-        if (sum >= l_sum) l_sum = sum;
-        i--;
+int partition(vector<int> &arr, int s, int e) {
+    int i = s - 1;
+    int pivot = arr[e];
+    for(int j = s; j < e; j++) {
+        if (arr[j] <= pivot) {
+            i++;
+            swap(arr[j], arr[i]);
+        }
     }
-    sum = 0;
-    int r_sum = INT_MIN;
-    int j = mid+1;
-    while (j <= e) {
-        sum += arr[j];
-        if (sum >= r_sum) r_sum = sum;
-        j++;
-    }
-    return l_sum + r_sum;
+    swap(arr[i+1], arr[e]);
+    return i + 1;
 }
