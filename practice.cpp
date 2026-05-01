@@ -1,27 +1,63 @@
 #include <iostream>
 #include <vector>
+#include <utility>
 
 using namespace std;
 
-int majority(vector<int> &arr, int s, int e);
+vector<int> countSmaller(vector<int> &arr);
+void mergeSort(vector<pair<int, int>> &e_i, int s, int e, vector<int> &count);
+void merge(vector<pair<int, int>> &e_i, int s, int mid, int e, vector<int> &count);
 
-int main() {
-    vector<int> arr = {2, 3, 1, 3, 3, 3, 2};
-    int element = majority(arr, 0, arr.size() - 1);
-    cout << element << endl;
+int main () {
+    vector<int> arr = {5, 2, 6, 1};
+    vector<int> res = countSmaller(arr);
+    for(int r: res) cout << r << " ";
+    cout << endl;
 }
 
-int majority(vector<int> &arr, int s, int e) {
-    if (s == e) return arr[s];
-    int mid = (s + e) / 2;
-    int l = majority(arr, s, mid);
-    int r = majority(arr, mid + 1, e);
-    if (l == r) return l;
-    int lcount = 0; int rcount = 0;
-    for(int i = s; i <= e; i++) {
-        if (arr[i] == l) lcount++;
-        else if (arr[i] == r) rcount++;
+vector<int> countSmaller(vector<int> &arr) {
+    vector<pair<int, int>> element_i; 
+    for (int i = 0; i < arr.size(); i++) {
+        element_i.push_back({arr[i], i});
     }
-    if (lcount > rcount) return l;
-    else return r;
+    vector<int> count(arr.size(), 0);
+    mergeSort(element_i, 0, arr.size() - 1, count);
+    return count;
+}
+
+void mergeSort(vector<pair<int, int>> &e_i, int s, int e, vector<int> &count) {
+    if(s >= e) return;
+    int mid = (s + e) / 2;
+    mergeSort(e_i, s, mid, count);
+    mergeSort(e_i, mid + 1, e, count);
+    merge(e_i, s, mid, e, count);
+}
+
+void merge(vector<pair<int, int>> &e_i, int s, int mid, int e, vector<int> &count) {
+    int i = s;
+    int j = mid + 1;
+    int right_count = 0;
+    vector<pair<int, int>> tmp;
+    while(i <= mid && j <= e) {
+        if(e_i[j].first < e_i[i].first) {
+            right_count++;
+            tmp.push_back(e_i[j]);
+            j++;
+        }
+        else {
+            count[e_i[i].second] += right_count;
+            tmp.push_back(e_i[i]);
+            i++;
+        }
+    }
+    while (i <= mid) {
+        count[e_i[i].second] += right_count;
+        tmp.push_back(e_i[i]);
+        i++;
+    }
+    while (j <= e) {
+        tmp.push_back(e_i[j]);
+        j++;
+    }
+    for(int i = s, j = 0; i <= e; i++, j++) e_i[i] = tmp[j];
 }
