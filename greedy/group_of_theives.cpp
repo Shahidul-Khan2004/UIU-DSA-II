@@ -49,34 +49,26 @@ int main() {
     }
     int required_thieves = ceil(total_weight / 9.0);
     sort(items.begin(), items.end(), comp);
-    
     for (int i = 1; i <= required_thieves; i++) {
-        int profit = 0;
-        int capacity = 9;
-        cout << "Thief " << i << ": " << endl;
-        while (capacity > 0 && !items.empty()) {
-            if (capacity >= items[0].weight) {
-                cout << items[0].weight << " kg " << items[0].name << endl;
-                
+        int cap = 9; int profit = 0;
+        cout << "thief " << i << endl;
+        while (!items.empty() && cap != 0)
+        {
+            if (items[0].weight <= cap) {
+                cout << items[0].name << " " << items[0].weight << "kg" << endl;
                 profit += items[0].value;
-                capacity -= items[0].weight;
-
+                cap -= items[0].weight;
                 items.erase(items.begin());
             }
             else {
-                cout << capacity << " kg " << items[0].name << endl;
-
-                int unit_price = items[0].value / items[0].weight;
-
-                profit += unit_price * capacity;
-
-                items[0].weight -= capacity;
-                items[0].value -= capacity * unit_price;
-
-                capacity = 0;
+                cout << items[0].name << " " << cap << "kg" << endl;
+                double unit_price = items[0].value / (double) items[0].weight;
+                profit += cap * unit_price;
+                items[0].value -= cap * unit_price;
+                items[0].weight -= cap;
+                cap = 0;
             }
         }
-        cout << "Profit of Thief " << i << ": " << profit << " taka" << endl;
-        cout << endl;
+        cout << "profit: " << profit << endl;
     }
 }
