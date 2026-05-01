@@ -1,28 +1,48 @@
 #include <iostream>
 #include <vector>
+#include <climits>
 
 using namespace std;
 
-class student{
+class extreme {
     public:
-    string name;
-    int id;
-    double cg;
+    int max;
+    int max2;
+    int min;
+    int min2;
 };
 
-student best_student(vector<student> &students, int s, int e);
+extreme maxmin(vector<int> &arr, int s, int e);
 
 int main() {
-    vector<student> students = {{"S", 1, 4.0}, {"R", 2, 3.0}, {"P", 3, 2.0}};
-    student best = best_student(students, 0, students.size() - 1);
-    cout << best.name << endl;
+    vector<int> arr = {-1, 1, 3, 4, 2, -5, 14, 3, 22, -22, 4, 5, 33, -53};
+    extreme m = maxmin(arr, 0, arr.size() - 1);
+    cout << m.max << " " << m.max2 << endl;
+    cout << m.min << " " << m.min2 << endl;
 }
 
-student best_student(vector<student> &students, int s, int e) {
-    if (s == e) return students[s];
+extreme maxmin(vector<int> &arr, int s, int e) {
+    if (s == e) return {arr[s], INT_MIN, arr[s], INT_MAX};
     int mid = (s + e) / 2;
-    student l = best_student(students, s, mid);
-    student r = best_student(students, mid + 1, e);
-    if(l.cg > r.cg) return l;
-    else return r;
+    extreme l = maxmin(arr, s, mid);
+    extreme r = maxmin(arr, mid + 1, e);
+    extreme res;
+    if (l.max > r.max) {
+        res.max = l.max;
+        (r.max > l.max2) ? res.max2 = r.max : res.max2 = l.max2;
+    }
+    else {
+        res.max = r.max;
+        (l.max > r.max2) ? res.max2 = l.max : res.max2 = r.max2;
+    }
+
+    if (l.min < r.min) {
+        res.min = l.min;
+        (l.min2 < r.min) ? res.min2 = l.min2 : res.min2 = r.min;
+    }
+    else {
+        res.min = r.min;
+        (r.min2 < l.min) ? res.min2 = r.min2 : res.min2 = l.min;
+    }
+    return res;
 }
