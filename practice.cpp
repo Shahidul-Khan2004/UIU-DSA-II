@@ -1,23 +1,42 @@
 #include <iostream>
 #include <vector>
-#include <utility>
+#include <climits>
 
 using namespace std;
 
-pair<int, int> max_min(vector<int> &arr, int s, int e);
+int maximum_sub_sum(vector<int> &arr, int s, int e);
+int cross_sum(vector<int> &arr, int s, int mid, int e);
 
 int main() {
-    vector<int> arr = {-1, 1, 3, 4, 2, -5, 14, 3, 22, -22, 4, 5, 33};
-    pair<int, int> m = max_min(arr, 0, arr.size() - 1);
-    cout << "max: " << m.first << " min: " << m.second << endl;
+    vector<int> arr = {2, 3, -8, 7, -1, 2, 3};
+    cout << maximum_sub_sum(arr, 0, arr.size() - 1) << endl;
 }
 
-pair<int, int> max_min(vector<int> &arr, int s, int e) {
-    if (s == e) return {arr[s], arr[s]};
+int maximum_sub_sum(vector<int> &arr, int s, int e) {
+    if(s == e) return arr[s];
     int mid = (s + e) / 2;
-    pair<int, int> l = max_min(arr, s, mid);
-    pair<int, int> r = max_min(arr, mid + 1, e);
-    int maximum = max(l.first, r.first);
-    int minimum = min(l.second, r.second);
-    return {maximum, minimum};
+    int l = maximum_sub_sum(arr, s, mid);
+    int r = maximum_sub_sum(arr, mid + 1, e);
+    int c = cross_sum(arr, s, mid, e);
+    return max(max(l, r), c);
+}
+
+int cross_sum(vector<int> &arr, int s, int mid, int e) {
+    int sum = 0;
+    int l_sum = INT_MIN;
+    int i = mid;
+    while (i >= s) {
+        sum += arr[i];
+        if (sum >= l_sum) l_sum = sum;
+        i--;
+    }
+    sum = 0;
+    int r_sum = INT_MIN;
+    int j = mid+1;
+    while (j <= e) {
+        sum += arr[j];
+        if (sum >= r_sum) r_sum = sum;
+        j++;
+    }
+    return l_sum + r_sum;
 }
