@@ -3,24 +3,26 @@
 
 using namespace std;
 
-int countVowels (string st, int s, int e);
-bool isVowel(char c);
+class student{
+    public:
+    string name;
+    int id;
+    double cg;
+};
+
+student best_student(vector<student> &students, int s, int e);
 
 int main() {
-    string st = "Apple, banana, beef and chicken is good";
-    cout << countVowels(st, 0, st.length() - 1) << endl;
+    vector<student> students = {{"S", 1, 4.0}, {"R", 2, 3.0}, {"P", 3, 2.0}};
+    student best = best_student(students, 0, students.size() - 1);
+    cout << best.name << endl;
 }
 
-int countVowels (string st, int s, int e) {
-    if (s == e) return isVowel(st[s]);
+student best_student(vector<student> &students, int s, int e) {
+    if (s == e) return students[s];
     int mid = (s + e) / 2;
-    int l = countVowels(st, s, mid);
-    int r = countVowels(st, mid + 1, e);
-    return l + r;
-}
-
-bool isVowel(char c) {
-    c = tolower(c);
-    if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') return true;
-    else return false;
+    student l = best_student(students, s, mid);
+    student r = best_student(students, mid + 1, e);
+    if(l.cg > r.cg) return l;
+    else return r;
 }
