@@ -29,6 +29,33 @@ int knapSackMemo(int W, vector<int> &wt, vector<int> &val, int n, vector<vector<
     return dp[n][W];
 }
 
+int knapSackDP(int W, vector<int>& wt, vector<int>& val, int n) {
+    
+    vector<vector<int>> dp(n + 1, vector<int>(W + 1, -1));
+    
+
+    for (int w = 0; w <= W; w++) {
+        dp[0][w] = 0;
+    }
+    
+    for (int i = 0; i <= n; i++) {
+        dp[i][0] = 0;
+    }
+    
+    for (int i = 1; i <= n; i++) {           
+        for (int w = 1; w <= W; w++) {
+            if (wt[i] <= w) {
+               
+                dp[i][w] = max(val[i] + dp[i - 1][w - wt[i]],
+                               dp[i - 1][w]);
+            } else {
+                dp[i][w] = dp[i - 1][w];
+            }
+        }
+    }
+    return dp[n][W];
+}
+
 int main()
 {
     int n, W;
@@ -57,7 +84,7 @@ int main()
 
     vector<vector<int>> dp(n + 1, vector<int>(W + 1, -1));
 
-    int maxValue = knapSackMemo(W, wt, val, n, dp);
+    int maxValue = knapSackDP(W, wt, val, n);
 
     cout << "Maximum value that can be obtained = " << maxValue << endl;
 
