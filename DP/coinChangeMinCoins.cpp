@@ -1,5 +1,6 @@
 #include <iostream>
 #include <climits>
+#include <algorithm>
 
 using namespace std;
 
@@ -16,14 +17,22 @@ int coinChange(int coins[], int sum, int n)
     {
         return INT_MAX - 1;
     }
+
+    if (memo[n][sum] != -1)
+    {
+        return memo[n][sum];
+    }
+
     if (coins[n - 1] <= sum)
     {
-        return min(1 + coinChange(coins, sum - coins[n - 1], n), coinChange(coins, sum, n - 1));
+        memo[n][sum] = min(1 + coinChange(coins, sum - coins[n - 1], n), coinChange(coins, sum, n - 1));
     }
     else
     {
-        return coinChange(coins, sum, n - 1);
+        memo[n][sum] = coinChange(coins, sum, n - 1);
     }
+
+    return memo[n][sum];
 }
 
 int coinChangeDp(int coins[], int sum, int n)
@@ -86,12 +95,15 @@ int main()
     {
         for (int j = 0; j <= sum; j++)
         {
-            memo[i][j] = INT_MAX - 1;
+            memo[i][j] = -1;
         }
     }
 
-    int res = coinChangeDp(coins, sum, n);
-    cout << "Minimum number of coins required = " << res << endl;
+    int resm = coinChange(coins, sum, n);
+    cout << "Minimum number of coins required (memoization) = " << resm << endl;
+
+    int rest = coinChangeDp(coins, sum, n);
+    cout << "Minimum number of coins required (tabulation) = " << rest << endl;
 
     return 0;
 }
