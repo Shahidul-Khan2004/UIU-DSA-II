@@ -16,21 +16,21 @@ int Find(int x, int parent[])
 
 void Union(int u, int v, int parent[], int Rank[])
 {
-
     int rootU = Find(u, parent);
     int rootV = Find(v, parent);
 
-    if (Rank[rootU] > Rank[rootV])
+    if (rootU == rootV)
+        return;
+
+    if (Rank[rootU] >= Rank[rootV])
     {
         parent[rootV] = rootU;
-        Rank[rootU] += rootV;
+        Rank[rootU] += Rank[rootV];
     }
-
     else
     {
-
         parent[rootU] = rootV;
-        Rank[rootV] += rootU;
+        Rank[rootV] += Rank[rootU];
     }
 }
 
