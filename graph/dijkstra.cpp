@@ -20,7 +20,7 @@ int main() {
 
     // algo
     vector<int> visited(V, 0);
-    vector<int> dist(V, INT_MAX);
+    vector<int> dist(V, INT_MAX / 2);
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
     dist[src] = 0;
     pq.push({dist[src], src});
