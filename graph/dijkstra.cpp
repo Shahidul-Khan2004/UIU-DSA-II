@@ -42,7 +42,7 @@ int main() {
     // print distance
     for (int i = 0; i < V; i++)
     {
-        if (dist[i] == INT_MAX)
+        if (dist[i] == INT_MAX / 2)
         {
             cout << "src to " << i << ": inf" << endl;
         }
