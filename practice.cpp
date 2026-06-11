@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <climits>
 
 using namespace std;
 
@@ -14,24 +15,34 @@ int main() {
         adjList[u].push_back({w, v});
         adjList[v].push_back({w, u});
     }
+    int src;
+    cin >> src;
     vector<int> visited(V, 0);
+    vector<int> dist(V, INT_MAX / 2);
+    dist[src] = 0;
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-    pq.push({0, 0});
-    int cost = 0;
+    pq.push({dist[src], src});
     while (!pq.empty())
     {
         pair<int, int> node = pq.top();
-        int v = node.second;
-        int w = node.first;
+        int u = node.second;
+        visited[u] = 1;
         pq.pop();
-        if(!visited[v]) {
-            visited[v] = 1;
-            cost+=w;
-            for(auto adj:adjList[v]) {
-                pq.push({adj.first, adj.second});
+        for (auto adj: adjList[u]) {
+            int w = adj.first, v = adj.second;
+            if(!visited[v] && dist[v] > dist[u] + w) {
+                dist[v] = dist[u] + w;
+                pq.push({dist[v], v});
             }
         }
     }
-    cout << cost << endl;
+    for (int i = 0; i < V; i++)
+    {
+        if (dist[i] == INT_MAX / 2)
+        {
+            cout << "src to " << i << ": inf" << endl;
+        }
+        cout << "src to " << i << ": " << dist[i] << endl;
+    }
 }
 
